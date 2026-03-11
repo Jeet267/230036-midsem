@@ -1,0 +1,62 @@
+{
+    "llm_tool": "Antigravity (Google DeepMind)",
+    "disclosure": "All Part B notebooks were generated with the assistance of an LLM coding assistant. The following prompts were used for each task. Code and markdown were reviewed, verified against the paper, and executed to confirm correctness.",
+    "tasks": [
+        {
+            "task": "1.1",
+            "file": "task_1_1.ipynb",
+            "purpose": "Step-by-step method description of MSVMpack (markdown only)",
+            "prompt": "Write a 9-step method description of the MSVMpack paper (Lauer & Guermeur, JMLR 2011) covering: input space & kernel setup (Section 2), function class H and decision rule argmax_k h_k(x), generic QP formulation from Definition 1 Eq.1, specialisation to 4 M-SVMs via M/p/K1/K2/K3 (Table 1), Wolfe dual and alpha_ik (Section 3.1), Frank-Wolfe descent and LP sub-problem, decomposition for large datasets, stopping criterion via U(alpha), and prediction. End with one summary sentence on what the paper solves.",
+            "modifications": "All content rewritten in own words. Equations typeset in LaTeX. Verified against paper sections and Table 1."
+        },
+        {
+            "task": "1.2",
+            "file": "task_1_2.ipynb",
+            "purpose": "Three implicit assumptions in MSVMpack (markdown only)",
+            "prompt": "Identify and explain 3 assumptions embedded in MSVMpack: (1) positive-type kernel for valid RKHS (Section 2), (2) convex QP with valid norm matrix M for unique dual solution (Definition 1), (3) Frank-Wolfe working-set approximation sufficient for convergence (Section 3.1). Format each as: Assumption / Why method needs it / Violation scenario / Paper reference.",
+            "modifications": "Violation scenarios made specific to the MSVMpack context. Language made original throughout."
+        },
+        {
+            "task": "1.3",
+            "file": "task_1_3.ipynb",
+            "purpose": "Baselines, limitations, and failure cases (markdown only)",
+            "prompt": "Describe: (1) BSVM as primary baseline for WW model, (2) limitations: no unified package / BSVM memory failure on CB513 / no parallelism, (3) how MSVMpack overcomes: unified C implementation / decomposition / OpenMP, (4) where MSVMpack does NOT outperform: USPS-500 small dataset (0.2s vs 2.5s, Table 2) and Q>20 MSVM2 U(alpha) overhead (Section 3.1).",
+            "modifications": "Numbers taken directly from Table 2 and Section 3.1 of paper."
+        },
+        {
+            "task": "2.1",
+            "file": "task_2_1.ipynb",
+            "purpose": "Dataset selection markdown justification + preprocessing code",
+            "prompt": "Justify using sklearn Wine dataset (178 samples, 13 features, 3 classes) for multi-class SVM reproduction: what it is, why it suits M-SVM (well-separated classes, real-valued features, same type as USPS), limitations vs USPS/CB513 (smaller, lower-dimensional, no spatial structure). Then load, standardise with StandardScaler, 80/20 split with random_state=42. Cite paper sections in each markdown cell.",
+            "modifications": "Dataset changed from Iris (in previous attempt) to Wine as specified. Justification rewritten. Proper stratified split added."
+        },
+        {
+            "task": "2.2",
+            "file": "task_2_2.ipynb",
+            "purpose": "Crammer-Singer M-SVM implementation with inline citations",
+            "prompt": "Implement CS M-SVM on Wine dataset using LinearSVC(multi_class='crammer_singer', C=1.0, random_state=42). Structure: every code block followed by (a) 2-3 sentence explanation and (b) specific paper citation. Steps: load+preprocess (cite Section 2), train CS model (cite Table 1 CS row and Definition 1), evaluate test error % = (1-accuracy)*100 (cite Table 2), summary print. End with interpretation markdown cell.",
+            "modifications": "All citation texts written originally. Hyperparameters defined at top of notebook."
+        },
+        {
+            "task": "2.3",
+            "file": "task_2_3.ipynb",
+            "purpose": "Results comparison, confusion matrix, reproducibility checklist",
+            "prompt": "Report test error vs paper CB513 CS result 23.63% (Table 2). Write 3-5 sentences explaining the gap (different dataset, sklearn vs LP Frank-Wolfe, no custom kernel, no CV). Plot confusion matrix saved to partB/results/confusion_matrix.png. Final cell: Reproducibility Checklist confirming random_state, requirements.txt, top-to-bottom execution, no manual steps, hyperparameters at top.",
+            "modifications": "Gap explanation written originally. Checklist formatted as markdown table."
+        },
+        {
+            "task": "3.1",
+            "file": "task_3_1.ipynb",
+            "purpose": "Two ablation studies: feature scaling and regularisation C",
+            "prompt": "Ablation 1: Full (StandardScaler) vs Ablated (raw features) - explain role of input normalisation in kernel margin geometry (Section 2) - bar chart saved to ablation_scaling.png - 5-7 sentence interpretation. Ablation 2: Full (C=1.0) vs Ablated (C=0.001) - link to lambda*||h_bar||^2 in Eq.1 - bar chart saved to ablation_C.png - 5-7 sentence interpretation. Keep all other settings fixed.",
+            "modifications": "Interpretation paragraphs written originally. Math typeset in LaTeX with correct Eq.1 references."
+        },
+        {
+            "task": "3.2",
+            "file": "task_3_2.ipynb",
+            "purpose": "Failure mode analysis with overlapping classes and decision boundary plot",
+            "prompt": "Generate make_classification(n_samples=300, n_features=2, n_informative=2, n_redundant=0, n_classes=3, n_clusters_per_class=1, class_sep=0.3, random_state=42). Describe violation of Assumptions 1 and 2 from Task 1.2. Train LinearSVC crammer_singer + RandomForestClassifier. Compare errors. Plot decision boundaries for both saved to failure_mode.png. Write 5-7 sentence paragraph linking to Definition 1 constraints. End with one-sentence modification suggestion.",
+            "modifications": "Failure explanation written originally with specific references to KKT margin constraints from Definition 1."
+        }
+    ]
+}
